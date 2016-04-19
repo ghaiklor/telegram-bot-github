@@ -1,0 +1,22 @@
+{
+  "name": "telegram-bot-github-notifications",
+  "version": "1.0.0",
+  "description": "Telegram bot for sending you notifications from GitHub",
+  "main": "src/index.js",
+  "author": "ghaiklor",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghaiklor/telegram-github-notifications.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ghaiklor/telegram-github-notifications/issues"
+  },
+  "homepage": "https://github.com/ghaiklor/telegram-github-notifications#readme",
+  "scripts": {
+    "test": "istanbul cover _mocha"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "0.21.1"
+  }
+}
