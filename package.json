@@ -17,8 +17,8 @@
     "start": "node src/index.js"
   },
   "dependencies": {
-    "github": "0.2.4",
     "node-telegram-bot-api": "0.21.1",
+    "request": "2.72.0",
     "require-all": "2.0.0"
   }
 }
