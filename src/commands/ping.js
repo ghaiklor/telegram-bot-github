@@ -7,6 +7,6 @@
  * @returns {TelegramBot}
  */
 module.exports = function (bot) {
-  bot.onText(/\/ping(.*)/i, (msg, match) => bot.sendMessage(msg.from.id, match[1] || 'pong'));
+  bot.onText(/\/ping(.*)/i, (message, match) => bot.sendMessage(message.from.id, match[1] || 'pong'));
   return bot;
 };

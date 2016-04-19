@@ -1,11 +1,14 @@
 "use strict";
 
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const User = mongoose.model('User', {
+const UserSchema = new Schema({
   username: String,
   token: String,
   telegramId: String
 });
 
-module.exports = User;
+const UserModel = mongoose.model('User', UserSchema);
+
+module.exports = UserModel;
