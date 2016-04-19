@@ -22,7 +22,7 @@ User.find({}, (error, users) => {
 
   users.forEach(user => {
     new GitHubNotifications(user.username, user.token).on('notification', data => {
-      bot.sendMessage(user.telegramId, data.repository.html_url);
+      bot.sendMessage(user.telegramId, `You have unread notification - ${data}`);
     });
   });
 });

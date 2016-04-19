@@ -47,7 +47,17 @@ class GitHubNotifications extends EventEmitter {
     }
 
     if (response.statusCode === 200) {
-      body.forEach(notification => this.emit('notification', notification));
+      body.forEach(notification => {
+        const subjectUrl = notification.subject.url;
+
+        request(subjectUrl, {headers: {'User-Agent': 'telegram-bot-github'}, json: true}, (error, response, body) => {
+          if (error) return console.error(error);
+
+          if (response.statusCode === 200) {
+            this.emit('notification', this._parseNotification(body));
+          }
+        });
+      });
     }
 
     setTimeout(this._request.bind(this), interval);
@@ -60,6 +70,16 @@ class GitHubNotifications extends EventEmitter {
    */
   _request() {
     request(this._url, {headers: this._headers, json: true}, this._onResponse.bind(this));
+  }
+
+  /**
+   * Parses notification and build readable message.
+   *
+   * @param {Object} notification
+   * @private
+   */
+  _parseNotification(notification) {
+    return notification.html_url;
   }
 }
 
