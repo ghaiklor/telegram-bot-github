@@ -1,12 +1,10 @@
 "use strict";
 
-/**
- * Check if bot is alive by sending ping command.
- *
- * @param {TelegramBot} bot
- * @returns {TelegramBot}
- */
-module.exports = function (bot) {
-  bot.onText(/\/ping(.*)/i, (message, match) => bot.sendMessage(message.from.id, match[1] || 'pong'));
-  return bot;
+module.exports = bot => {
+  bot.onText(/\/ping *(.*)/, (message, match) => {
+    const telegramId = message.from.id;
+    const response = (match[1] || `I'm alive, don't worry :)`).trim();
+
+    bot.sendMessage(telegramId, response);
+  });
 };

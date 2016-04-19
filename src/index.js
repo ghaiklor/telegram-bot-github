@@ -3,7 +3,8 @@
 const mongoose = require('mongoose');
 const requireAll = require('require-all');
 const TelegramBot = require('node-telegram-bot-api');
-const GitHubNotifications = require('./GitHubNotifications');
+const GitHubNotifications = require('./common/GitHubNotifications');
+const User = require('./models/User');
 
 const BOT_COMMANDS = requireAll({dirname: `${__dirname}/commands`});
 const TELEGRAM_BOT_TOKEN = process.env['TELEGRAM_BOT_TOKEN'];
@@ -15,12 +16,12 @@ const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, {polling: true});
 Object.keys(BOT_COMMANDS).forEach(command => BOT_COMMANDS[command](bot));
 
 mongoose.connect(process.env['MONGODB_URI']);
-const User = require('./models/User');
+
 User.find({}, (error, users) => {
   if (error) throw new Error(error);
 
   users.forEach(user => {
-    new GitHubNotifications(user.username, user.token).on('data', data => {
+    new GitHubNotifications(user.username, user.token).on('notification', data => {
       bot.sendMessage(user.telegramId, data.repository.html_url);
     });
   });

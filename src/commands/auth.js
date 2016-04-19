@@ -1,41 +1,34 @@
 "use strict";
 
 const User = require('../models/User');
-const GitHubNotifications = require('../GitHubNotifications');
+const GitHubNotifications = require('../common/GitHubNotifications');
+const MESSAGES = require('../common/messages');
 
-/**
- * Registers new GitHub user in bot.
- *
- * @param {TelegramBot} bot
- * @returns {TelegramBot}
- */
-module.exports = function (bot) {
-  bot.onText(/\/auth (.*):(.*)/i, (message, match) => {
+module.exports = bot => {
+  bot.onText(/\/auth *(.*):(.*)/, (message, match) => {
     const username = match[1];
     const token = match[2];
     const telegramId = message.from.id;
 
-    if (!username || !token) return bot.sendMessage(telegramId, 'You should specify username and token');
+    if (!username || !token) return bot.sendMessage(telegramId, MESSAGES.USERNAME_AND_TOKEN_NOT_SPECIFIED);
 
-    User.find({username, telegramId}, (error, user) => {
-      if (error) return bot.sendMessage(telegramId, 'Something went wrong, try again...');
+    User.findOne({username, telegramId}, (error, user) => {
+      if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
 
-      if (!user.length) {
+      if (!user) {
         User.create({username, token, telegramId}, (error, user) => {
-          if (error) return bot.sendMessage(telegramId, 'Something went wrong, try again...');
+          if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
 
-          bot.sendMessage(telegramId, 'You successfully has been registered');
-          new GitHubNotifications(username, token).on('data', data => bot.sendMessage(telegramId, data));
+          bot.sendMessage(telegramId, MESSAGES.REGISTER_SUCCESSFUL);
+          new GitHubNotifications(user.username, user.token).on('notification', data => bot.sendMessage(telegramId, data));
         });
       } else {
         User.update({username, telegramId}, {token}, (error, user) => {
-          if (error) return bot.sendMessage(telegramId, 'Something went wrong, try again...');
+          if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
 
-          bot.sendMessage(telegramId, 'Your profile successfully has been updated');
+          bot.sendMessage(user.telegramId, MESSAGES.PERSONAL_TOKEN_UPDATED);
         });
       }
     });
   });
-
-  return bot;
 };

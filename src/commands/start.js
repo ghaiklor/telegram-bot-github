@@ -1,11 +1,10 @@
 "use strict";
 
-module.exports = function (bot) {
-  bot.onText(/\/start/i, (message, match) => {
+module.exports = bot => {
+  bot.onText(/\/start */, message => {
     const fromId = message.from.id;
+    const response = `Hey! I'm here to help you integrate your GitHub account for receiving notifications, type /help`;
 
-    bot.sendMessage(fromId, `Hey! I'm here to help you integrate your GitHub account for receiving notifications, type /help`);
+    bot.sendMessage(fromId, response);
   });
-
-  return bot;
 };
