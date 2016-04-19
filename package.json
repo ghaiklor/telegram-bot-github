@@ -1,25 +1,37 @@
 {
-  "name": "telegram-bot-github-notifications",
+  "name": "telegram-bot-github",
   "version": "1.0.0",
   "description": "Telegram bot for sending you notifications from GitHub",
   "main": "src/index.js",
   "author": "ghaiklor",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ghaiklor/telegram-github-notifications.git"
+    "url": "git+https://github.com/ghaiklor/telegram-bot-github.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ghaiklor/telegram-github-notifications/issues"
+    "url": "https://github.com/ghaiklor/telegram-bot-github/issues"
   },
-  "homepage": "https://github.com/ghaiklor/telegram-github-notifications#readme",
+  "homepage": "https://github.com/ghaiklor/telegram-bot-github#readme",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "test": "istanbul cover _mocha"
   },
   "dependencies": {
     "mongoose": "4.4.12",
     "node-telegram-bot-api": "0.21.1",
     "request": "2.72.0",
     "require-all": "2.0.0"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "1.1.5",
+    "istanbul": "0.4.3",
+    "mocha": "2.4.5",
+    "sinon": "1.17.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
