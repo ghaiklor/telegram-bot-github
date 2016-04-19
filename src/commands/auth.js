@@ -17,10 +17,10 @@ module.exports = function (bot) {
 
     if (!username || !token) return bot.sendMessage(telegramId, 'You should specify username and token');
 
-    User.findByUsername(username, (error, user) => {
+    User.find({username, telegramId}, (error, user) => {
       if (error) return bot.sendMessage(telegramId, 'Something went wrong, try again...');
 
-      if (!user) {
+      if (!user.length) {
         User.create({username, token, telegramId}, (error, user) => {
           if (error) return bot.sendMessage(telegramId, 'Something went wrong, try again...');
 

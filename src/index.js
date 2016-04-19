@@ -21,7 +21,7 @@ User.find({}, (error, users) => {
 
   users.forEach(user => {
     new GitHubNotifications(user.username, user.token).on('data', data => {
-      bot.sendMessage(user.telegramId, data);
+      bot.sendMessage(user.telegramId, data.repository.html_url);
     });
   });
 });
