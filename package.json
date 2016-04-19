@@ -17,6 +17,7 @@
     "start": "node src/index.js"
   },
   "dependencies": {
+    "mongoose": "4.4.12",
     "node-telegram-bot-api": "0.21.1",
     "request": "2.72.0",
     "require-all": "2.0.0"
