@@ -2,7 +2,6 @@
 
 const EventEmitter = require('events').EventEmitter;
 const request = require('request');
-const winston = require('winston');
 
 const NOTIFICATIONS_ENDPOINT = 'api.github.com/notifications';
 
@@ -23,11 +22,11 @@ class GitHubNotifications extends EventEmitter {
    */
   constructor(username, token) {
     if (subscribedUsers[username] instanceof GitHubNotifications) {
-      winston.log(`Found already subscribed listener for ${username} (ignore creating of the listener)`);
+      console.log(`Found already subscribed listener for ${username} (ignore creating of the listener)`);
       return subscribedUsers[username];
     }
 
-    winston.log(`Creating new GitHub Notifications listener for ${username}`);
+    console.log(`Creating new GitHub Notifications listener for ${username}`);
 
     super();
 
@@ -50,9 +49,9 @@ class GitHubNotifications extends EventEmitter {
    * @private
    */
   _onNotificationsResponse(error, response, body) {
-    if (error) return winston.error(error);
+    if (error) return console.error(error);
 
-    winston.log(`Got code ${response.statusCode} for ${this._username} when checking notifications`);
+    console.log(`Got code ${response.statusCode} for ${this._username} when checking notifications`);
 
     const interval = (Number(response.headers['x-poll-interval']) || 60) * 1000;
 
@@ -65,12 +64,12 @@ class GitHubNotifications extends EventEmitter {
         const subjectUrl = notification.subject.url;
         const headers = {'User-Agent': 'telegram-bot-github'};
 
-        winston.log(`Got new subject from notification for ${this._username}, processing...`);
+        console.log(`Got new subject from notification for ${this._username}, processing...`);
         request(subjectUrl, {headers, json: true}, this._onSubjectResponse.bind(this));
       });
     }
 
-    winston.log(`Queuing next check for ${this._username} after ${interval / 1000} seconds`);
+    console.log(`Queuing next check for ${this._username} after ${interval / 1000} seconds`);
     setTimeout(this._process.bind(this), interval);
   }
 
@@ -83,10 +82,10 @@ class GitHubNotifications extends EventEmitter {
    * @private
    */
   _onSubjectResponse(error, response, body) {
-    if (error) return winston.error(error);
+    if (error) return console.error(error);
 
     if (response.statusCode === 200) {
-      winston.log(`Parsed new subject HTML URI for ${this._username}, emitting...`);
+      console.log(`Parsed new subject HTML URI for ${this._username}, emitting...`);
       this.emit('notification', body.html_url);
     }
   }
@@ -97,7 +96,7 @@ class GitHubNotifications extends EventEmitter {
    * @private
    */
   _process() {
-    winston.log(`Checking for new notifications on GitHub for ${this._username}`);
+    console.log(`Checking for new notifications on GitHub for ${this._username}`);
     request(this._url, {headers: this._headers, json: true}, this._onNotificationsResponse.bind(this));
   }
 }
