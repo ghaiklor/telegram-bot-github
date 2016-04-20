@@ -1,5 +1,6 @@
 "use strict";
 
+const http = require('http');
 const mongoose = require('mongoose');
 const requireAll = require('require-all');
 const TelegramBot = require('node-telegram-bot-api');
@@ -26,3 +27,9 @@ User.find({}, (error, users) => {
     });
   });
 });
+
+http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Bot is working\n');
+}).listen(process.env['PORT']);
