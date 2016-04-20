@@ -53,11 +53,11 @@ class GitHubNotifications extends EventEmitter {
 
     console.log(`Got code ${response.statusCode} for ${this._username} when checking notifications`);
 
-    const interval = (Number(response.headers['x-poll-interval']) || 60) * 1000;
+    const interval = (Number(response.headers['X-Poll-Interval']) || 60) * 1000;
 
     if (response.statusCode === 304 || response.statusCode === 200) {
-      console.log(`Updating If-Modified-Since header with new value for ${this._username}: ${response.headers['last-modified']}`);
-      this._headers['If-Modified-Since'] = response.headers['last-modified'];
+      console.log(`Updating If-Modified-Since header with new value for ${this._username}: ${response.headers['Last-Modified']}`);
+      this._headers['If-Modified-Since'] = response.headers['Last-Modified'];
     }
 
     if (response.statusCode === 200) {
