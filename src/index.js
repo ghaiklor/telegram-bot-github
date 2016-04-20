@@ -1,36 +1,40 @@
 "use strict";
 
-const http = require('http');
+const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const requireAll = require('require-all');
 const TelegramBot = require('node-telegram-bot-api');
 const GitHubNotifications = require('./services/GitHubNotifications');
 const User = require('./models/User');
-
 const BOT_COMMANDS = requireAll({dirname: `${__dirname}/commands`});
-const TELEGRAM_BOT_TOKEN = process.env['TELEGRAM_BOT_TOKEN'];
+const app = express();
 
-if (!TELEGRAM_BOT_TOKEN) throw new Error('You must provide telegram bot token');
+if (!process.env.TELEGRAM_BOT_TOKEN) throw new Error('You must provide TELEGRAM_BOT_TOKEN');
+if (!process.env.MONGODB_URI) throw new Error('You must provide MONGODB_URI');
+if (!process.env.PORT) throw new Error('You must provide PORT');
 
-const telegramBotConfig = process.env.NODE_ENV === 'production' ? {webHook: true} : {polling: true};
-const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, telegramBotConfig);
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, {polling: process.env.NODE_ENV !== 'production'});
+if (process.env.NODE_ENV === 'production') bot.setWebHook(`https://telegram-bot-github.herokuapp.com/${bot.token}`);
 
 Object.keys(BOT_COMMANDS).forEach(command => BOT_COMMANDS[command](bot));
 
-mongoose.connect(process.env['MONGODB_URI']);
+app.use(bodyParser.json());
+app.get(`/`, (req, res) => res.redirect('http://telegram.me/GitHubNotificationsBot'));
+app.post(`/${process.env.TELEGRAM_BOT_TOKEN}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+app.listen(process.env.PORT);
+
+mongoose.connect(process.env.MONGODB_URI);
 
 User.find({}, (error, users) => {
   if (error) throw new Error(error);
 
   users.forEach(user => {
     new GitHubNotifications(user.username, user.token).on('notification', data => {
-      bot.sendMessage(user.telegramId, `You have unread notification - ${data}`);
+      bot.sendMessage(user.telegramId, `${data}`);
     });
   });
 });
-
-http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Bot is working\n');
-}).listen(process.env['PORT']);
