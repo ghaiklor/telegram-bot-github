@@ -11,6 +11,8 @@ module.exports = bot => {
     const telegramId = message.from.id;
 
     if (!username && !token) return bot.sendMessage(telegramId, MESSAGES.USERNAME_AND_GITHUB_TOKEN_NOT_SPECIFIED);
+    if (!username) return bot.sendMessage(telegramId, MESSAGES.USERNAME_NOT_SPECIFIED);
+    if (!token) return bot.sendMessage(telegramId, MESSAGES.GITHUB_TOKEN_NOT_SPECIFIED);
 
     User.findOne({username, telegramId}, (error, user) => {
       if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
