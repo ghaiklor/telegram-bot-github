@@ -1,10 +1,10 @@
 "use strict";
 
 module.exports = bot => {
-  bot.onText(/\/ping *(.*)/, (message, match) => {
-    const telegramId = message.from.id;
-    const response = (match[1] || `I'm alive, don't worry :)`).trim();
+  bot.onText(/\/ping/, message => {
+    const fromId = message.from.id;
+    const response = `I'm alive, don't worry :)`;
 
-    bot.sendMessage(telegramId, response);
+    bot.sendMessage(fromId, response);
   });
 };

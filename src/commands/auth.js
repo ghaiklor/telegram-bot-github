@@ -5,12 +5,12 @@ const GitHubNotifications = require('../services/GitHubNotifications');
 const MESSAGES = require('../common/messages');
 
 module.exports = bot => {
-  bot.onText(/\/auth *(.*):(.*)/, (message, match) => {
+  bot.onText(/\/auth (.*):(.*)|\/auth/, (message, match) => {
     const username = match[1];
     const token = match[2];
     const telegramId = message.from.id;
 
-    if (!username || !token) return bot.sendMessage(telegramId, MESSAGES.USERNAME_AND_TOKEN_NOT_SPECIFIED);
+    if (!username && !token) return bot.sendMessage(telegramId, MESSAGES.USERNAME_AND_GITHUB_TOKEN_NOT_SPECIFIED);
 
     User.findOne({username, telegramId}, (error, user) => {
       if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
