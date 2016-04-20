@@ -19,6 +19,7 @@ module.exports = bot => {
 
       if (!user) {
         User.create({username, token, telegramId}, (error, user) => {
+          if (error && error.code == '11000') return bot.sendMessage(telegramId, MESSAGES.USERNAME_ALREADY_REGISTERED);
           if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
 
           bot.sendMessage(telegramId, MESSAGES.REGISTER_SUCCESSFUL);
