@@ -1,9 +1,8 @@
 # telegram-bot-github
 
-![Build Status](https://img.shields.io/travis/ghaiklor/telegram-bot-github-notifications.svg)
-![Coverage](https://img.shields.io/coveralls/ghaiklor/telegram-bot-github-notifications.svg)
-
 Telegram bot that notifies you when you get new notification on GitHub.
+
+You can add this bot to your contact list [here](http://telegram.me/GitHubNotificationsBot).
 
 ## License
 
