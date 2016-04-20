@@ -1,8 +1,7 @@
 {
   "name": "telegram-bot-github",
   "version": "1.0.0",
-  "description": "Telegram bot for sending you notifications from GitHub",
-  "main": "src/index.js",
+  "description": "Allows to you receive GitHub notifications right in the Telegram",
   "author": "ghaiklor",
   "repository": {
     "type": "git",
@@ -14,8 +13,7 @@
   },
   "homepage": "https://github.com/ghaiklor/telegram-bot-github#readme",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "istanbul cover _mocha"
+    "start": "node src/index.js"
   },
   "dependencies": {
     "mongoose": "4.4.12",
