@@ -1,7 +1,7 @@
 "use strict";
 
 const User = require('../models/User');
-const GitHubNotifications = require('../common/GitHubNotifications');
+const GitHubNotifications = require('../services/GitHubNotifications');
 const MESSAGES = require('../common/messages');
 
 module.exports = bot => {

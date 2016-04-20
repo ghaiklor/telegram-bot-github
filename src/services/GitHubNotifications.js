@@ -26,18 +26,18 @@ class GitHubNotifications extends EventEmitter {
     this._url = `https://${this._username}:${this._token}@${NOTIFICATIONS_ENDPOINT}`;
     this._headers = {'User-Agent': 'telegram-bot-github'};
 
-    this._request();
+    this._process();
   }
 
   /**
-   * Triggers each time when got response from GitHub endpoint.
+   * Triggers each time when got response from GitHub notifications endpoint.
    *
    * @param error
    * @param response
    * @param body
    * @private
    */
-  _onResponse(error, response, body) {
+  _onNotificationsResponse(error, response, body) {
     if (error) return console.error(error);
 
     const interval = (Number(response.headers['x-poll-interval']) || 60) * 1000;
@@ -49,18 +49,29 @@ class GitHubNotifications extends EventEmitter {
     if (response.statusCode === 200) {
       body.forEach(notification => {
         const subjectUrl = notification.subject.url;
+        const headers = {'User-Agent': 'telegram-bot-github'};
 
-        request(subjectUrl, {headers: {'User-Agent': 'telegram-bot-github'}, json: true}, (error, response, body) => {
-          if (error) return console.error(error);
-
-          if (response.statusCode === 200) {
-            this.emit('notification', this._parseNotification(body));
-          }
-        });
+        request(subjectUrl, {headers, json: true}, this._onSubjectResponse.bind(this));
       });
     }
 
-    setTimeout(this._request.bind(this), interval);
+    setTimeout(this._process.bind(this), interval);
+  }
+
+  /**
+   * Triggers each time when got response from subject endpoint.
+   *
+   * @param error
+   * @param response
+   * @param body
+   * @private
+   */
+  _onSubjectResponse(error, response, body) {
+    if (error) return console.error(error);
+
+    if (response.statusCode === 200) {
+      this.emit('notification', body.html_url);
+    }
   }
 
   /**
@@ -68,18 +79,8 @@ class GitHubNotifications extends EventEmitter {
    *
    * @private
    */
-  _request() {
-    request(this._url, {headers: this._headers, json: true}, this._onResponse.bind(this));
-  }
-
-  /**
-   * Parses notification and build readable message.
-   *
-   * @param {Object} notification
-   * @private
-   */
-  _parseNotification(notification) {
-    return notification.html_url;
+  _process() {
+    request(this._url, {headers: this._headers, json: true}, this._onNotificationsResponse.bind(this));
   }
 }
 
