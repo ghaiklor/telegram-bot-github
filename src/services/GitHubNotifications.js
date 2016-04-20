@@ -56,8 +56,8 @@ class GitHubNotifications extends EventEmitter {
     const interval = (Number(response.headers['X-Poll-Interval']) || 60) * 1000;
 
     if (response.statusCode === 304 || response.statusCode === 200) {
-      console.log(`Updating If-Modified-Since header with new value for ${this._username}: ${response.headers['Last-Modified']}`);
-      this._headers['If-Modified-Since'] = response.headers['Last-Modified'];
+      console.log(`Updating If-Modified-Since header with new value for ${this._username}: ${response.headers.date}`);
+      this._headers['If-Modified-Since'] = response.headers.date;
     }
 
     if (response.statusCode === 200) {
