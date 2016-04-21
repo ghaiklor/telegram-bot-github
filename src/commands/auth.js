@@ -23,14 +23,19 @@ module.exports = bot => {
           if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
 
           bot.sendMessage(telegramId, MESSAGES.REGISTER_SUCCESSFUL);
-          new GitHubNotifications(user.username, user.token).on('notification', data => bot.sendMessage(telegramId, data));
+          GitHubNotifications.subscribe(user.username, user.token)
+            .on('notification', notification => bot.sendMessage(telegramId, notification))
+            .once('unauthorized', () => bot.sendMessage(telegramId, MESSAGES.UNAUTHORIZED));
         });
       } else {
         User.update({username, telegramId}, {token}, (error, user) => {
           if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
 
           bot.sendMessage(telegramId, MESSAGES.PERSONAL_TOKEN_UPDATED);
-          new GitHubNotifications(user.username, user.token).on('notification', data => bot.sendMessage(telegramId, data));
+          GitHubNotifications.unsubscribe(user.username);
+          GitHubNotifications.subscribe(user.username, user.token)
+            .on('notification', notification => bot.sendMessage(telegramId, notification))
+            .once('unauthorized', () => bot.sendMessage(telegramId, MESSAGES.UNAUTHORIZED));
         });
       }
     });

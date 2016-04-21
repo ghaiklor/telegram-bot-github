@@ -8,5 +8,6 @@ module.exports = {
   PERSONAL_TOKEN_UPDATED: `Your personal token has successfully been updated.`,
   USER_NOT_EXISTS: `I can't find GitHub profile with this username. You can register your GitHub account via /auth command.`,
   CANT_UPDATE_PERSONAL_TOKEN: `I can't update personal token for this user. Maybe it's not your GitHub username?`,
-  ACCOUNT_UNLINKED: `Your account has successfully been un-linked. You can register a new one via /auth command now.`
+  ACCOUNT_UNLINKED: `Your account has successfully been un-linked. You can register a new one via /auth command now.`,
+  UNAUTHORIZED: `Seems that your personal token is incorrect, I can't authorize you. Update your token via /auth command or unlink your account via /logout command.`
 };
