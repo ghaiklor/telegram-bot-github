@@ -3,8 +3,6 @@
 const EventEmitter = require('events').EventEmitter;
 const request = require('request');
 
-const NOTIFICATIONS_ENDPOINT = 'api.github.com/notifications';
-
 const subscribedUsers = {};
 
 class GitHubNotifications extends EventEmitter {
@@ -13,7 +11,7 @@ class GitHubNotifications extends EventEmitter {
 
     this._username = username;
     this._token = token;
-    this._url = `https://${this._username}:${this._token}@${NOTIFICATIONS_ENDPOINT}`;
+    this._url = this._buildAuthUrl(this._username, this._token, 'api.github.com/notifications');
     this._headers = {'User-Agent': 'telegram-bot-github'};
     this._timeout = null;
 
@@ -22,11 +20,14 @@ class GitHubNotifications extends EventEmitter {
     subscribedUsers[username] = this;
   }
 
+  _buildAuthUrl(username, token, url) {
+    return `https://${username}:${token}@${url.replace('https://', '')}`;
+  }
+
   _onNotificationsResponse(error, response, body) {
     if (error) return console.error(error);
 
     if (response.statusCode === 401) {
-      console.log(`${this._username} is not authorized`);
       this.emit('unauthorized');
       return GitHubNotifications.unsubscribe(this._username);
     }
@@ -39,10 +40,10 @@ class GitHubNotifications extends EventEmitter {
 
     if (response.statusCode === 200) {
       body.forEach(notification => {
-        const subjectUrl = notification.subject.url;
+        const subjectUrl = this._buildAuthUrl(this._username, this._token, notification.subject.latest_comment_url);
         const headers = {'User-Agent': 'telegram-bot-github'};
 
-        process.nextTick(() => request(subjectUrl, {headers, json: true}, this._onSubjectResponse.bind(this)));
+        request(subjectUrl, {headers, json: true}, this._onSubjectResponse.bind(this));
       });
     }
 
