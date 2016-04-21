@@ -64,8 +64,9 @@ class GitHubNotifications extends EventEmitter {
   }
 
   static subscribe(username, token) {
-    console.log(`Subscribe user: ${username}`);
     GitHubNotifications.unsubscribe(username);
+
+    console.log(`Subscribe user: ${username}`);
     return new this(username, token);
   }
 
