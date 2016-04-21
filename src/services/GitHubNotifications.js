@@ -10,7 +10,6 @@ const subscribedUsers = {};
 class GitHubNotifications extends EventEmitter {
   constructor(username, token) {
     if (subscribedUsers[username] instanceof GitHubNotifications) return subscribedUsers[username];
-    subscribedUsers[username] = this;
 
     super();
 
@@ -21,6 +20,8 @@ class GitHubNotifications extends EventEmitter {
     this._timeout = null;
 
     this._process();
+
+    subscribedUsers[username] = this;
   }
 
   _onNotificationsResponse(error, response, body) {
