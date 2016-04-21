@@ -9,8 +9,6 @@ const subscribedUsers = {};
 
 class GitHubNotifications extends EventEmitter {
   constructor(username, token) {
-    if (subscribedUsers[username] instanceof GitHubNotifications) return subscribedUsers[username];
-
     super();
 
     this._username = username;
@@ -28,6 +26,7 @@ class GitHubNotifications extends EventEmitter {
     if (error) return console.error(error);
 
     if (response.statusCode === 401) {
+      console.log(`${this._username} is not authorized`);
       this.emit('unauthorized');
       return GitHubNotifications.unsubscribe(this._username);
     }
@@ -43,7 +42,7 @@ class GitHubNotifications extends EventEmitter {
         const subjectUrl = notification.subject.url;
         const headers = {'User-Agent': 'telegram-bot-github'};
 
-        request(subjectUrl, {headers, json: true}, this._onSubjectResponse.bind(this));
+        process.nextTick(() => request(subjectUrl, {headers, json: true}, this._onSubjectResponse.bind(this)));
       });
     }
 
@@ -63,14 +62,13 @@ class GitHubNotifications extends EventEmitter {
   }
 
   static subscribe(username, token) {
-    console.log(`Subscribe new user: ${username}`);
+    console.log(`Subscribe user: ${username}`);
     return new this(username, token);
   }
 
   static unsubscribe(username) {
-    console.log(`Unsubscribe user: ${username}`);
+    console.log(`Un-subscribe user: ${username}`);
     clearTimeout(subscribedUsers[username] && subscribedUsers[username]._timeout);
-    delete subscribedUsers[username];
   }
 }
 
