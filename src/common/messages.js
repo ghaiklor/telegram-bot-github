@@ -7,5 +7,6 @@ module.exports = {
   USERNAME_ALREADY_REGISTERED: `You are already registered or you are trying to change a personal token of someone else's GitHub profile.`,
   PERSONAL_TOKEN_UPDATED: `Your personal token has successfully been updated.`,
   USER_NOT_EXISTS: `I can't find GitHub profile with this username. You can register your GitHub account via /auth command.`,
-  CANT_UPDATE_PERSONAL_TOKEN: `I can't update personal token for this user. Maybe it's not your GitHub username?`
+  CANT_UPDATE_PERSONAL_TOKEN: `I can't update personal token for this user. Maybe it's not your GitHub username?`,
+  ACCOUNT_UNLINKED: `Your account has successfully been un-linked. You can register a new one via /auth command now.`
 };
