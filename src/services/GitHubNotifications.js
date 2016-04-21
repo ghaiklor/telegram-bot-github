@@ -11,7 +11,6 @@ class GitHubNotifications extends EventEmitter {
 
     this._username = username;
     this._token = token;
-    this._url = this._buildAuthUrl(this._username, this._token, 'api.github.com/notifications');
     this._headers = {'User-Agent': 'telegram-bot-github'};
     this._timeout = null;
 
@@ -59,17 +58,21 @@ class GitHubNotifications extends EventEmitter {
   }
 
   _process() {
-    request(this._url, {headers: this._headers, json: true}, this._onNotificationsResponse.bind(this));
+    const url = this._buildAuthUrl(this._username, this._token, 'api.github.com/notifications');
+
+    request(url, {headers: this._headers, json: true}, this._onNotificationsResponse.bind(this));
   }
 
   static subscribe(username, token) {
     console.log(`Subscribe user: ${username}`);
+    GitHubNotifications.unsubscribe(username);
     return new this(username, token);
   }
 
   static unsubscribe(username) {
     console.log(`Un-subscribe user: ${username}`);
     clearTimeout(subscribedUsers[username] && subscribedUsers[username]._timeout);
+    delete subscribedUsers[username];
   }
 }
 
