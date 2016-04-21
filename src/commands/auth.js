@@ -6,7 +6,7 @@ const MESSAGES = require('../common/messages');
 
 module.exports = bot => {
   bot.onText(/\/auth (.*):(.*)|\/auth/, (message, match) => {
-    const username = match[1];
+    const username = match[1] && match[1].split('@')[0];
     const token = match[2];
     const telegramId = message.from.id;
 
