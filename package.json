@@ -24,7 +24,7 @@
     "require-all": "2.0.0"
   },
   "devDependencies": {
-    "cz-conventional-changelog": "1.1.5",
+    "cz-conventional-changelog": "1.1.6",
     "istanbul": "0.4.3",
     "mocha": "2.4.5",
     "sinon": "1.17.3"
