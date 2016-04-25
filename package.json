@@ -18,7 +18,7 @@
   "dependencies": {
     "body-parser": "1.15.0",
     "express": "4.13.4",
-    "mongoose": "4.4.12",
+    "mongoose": "4.4.13",
     "node-telegram-bot-api": "0.21.1",
     "request": "2.72.0",
     "require-all": "2.0.0"
