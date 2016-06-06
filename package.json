@@ -19,7 +19,7 @@
     "body-parser": "1.15.1",
     "express": "4.13.4",
     "mongoose": "4.4.19",
-    "node-telegram-bot-api": "0.21.1",
+    "node-telegram-bot-api": "0.22.1",
     "request": "2.72.0",
     "require-all": "2.0.0"
   },
