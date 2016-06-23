@@ -16,18 +16,18 @@
     "start": "node src/index.js"
   },
   "dependencies": {
-    "body-parser": "1.15.0",
-    "express": "4.13.4",
-    "mongoose": "4.4.12",
-    "node-telegram-bot-api": "0.21.1",
+    "body-parser": "1.15.2",
+    "express": "4.14.0",
+    "mongoose": "4.5.1",
+    "node-telegram-bot-api": "0.23.3",
     "request": "2.72.0",
     "require-all": "2.0.0"
   },
   "devDependencies": {
-    "cz-conventional-changelog": "1.1.5",
-    "istanbul": "0.4.3",
-    "mocha": "2.4.5",
-    "sinon": "1.17.3"
+    "cz-conventional-changelog": "1.1.6",
+    "istanbul": "0.4.4",
+    "mocha": "2.5.3",
+    "sinon": "1.17.4"
   },
   "config": {
     "commitizen": {

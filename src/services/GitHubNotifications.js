@@ -20,6 +20,8 @@ class GitHubNotifications extends EventEmitter {
   }
 
   _buildAuthUrl(username, token, url) {
+    if (!url) return '';
+
     return `https://${username}:${token}@${url.replace('https://', '')}`;
   }
 
@@ -41,6 +43,8 @@ class GitHubNotifications extends EventEmitter {
       body.forEach(notification => {
         const subjectUrl = this._buildAuthUrl(this._username, this._token, notification.subject.latest_comment_url);
         const headers = {'User-Agent': 'telegram-bot-github'};
+        
+        if (!subjectUrl) return;
 
         request(subjectUrl, {headers, json: true}, this._onSubjectResponse.bind(this));
       });
