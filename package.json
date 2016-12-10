@@ -21,7 +21,7 @@
     "mongoose": "4.6.0",
     "node-telegram-bot-api": "0.23.3",
     "request": "2.74.0",
-    "require-all": "2.0.0"
+    "require-all": "2.1.0"
   },
   "devDependencies": {
     "cz-conventional-changelog": "1.2.0",
