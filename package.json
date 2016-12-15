@@ -27,7 +27,7 @@
     "cz-conventional-changelog": "1.2.0",
     "istanbul": "0.4.5",
     "mocha": "3.0.2",
-    "sinon": "1.17.5"
+    "sinon": "1.17.6"
   },
   "config": {
     "commitizen": {
