@@ -18,15 +18,15 @@
   "dependencies": {
     "body-parser": "1.15.2",
     "express": "4.14.0",
-    "mongoose": "4.6.0",
+    "mongoose": "4.7.2",
     "node-telegram-bot-api": "0.23.3",
     "request": "2.79.0",
-    "require-all": "2.0.0"
+    "require-all": "2.1.0"
   },
   "devDependencies": {
     "cz-conventional-changelog": "1.2.0",
     "istanbul": "0.4.5",
-    "mocha": "3.0.2",
+    "mocha": "3.2.0",
     "sinon": "1.17.5"
   },
   "config": {
