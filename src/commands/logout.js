@@ -1,5 +1,3 @@
-"use strict";
-
 const User = require('../models/User');
 const GitHubNotifications = require('../services/GitHubNotifications');
 const MESSAGES = require('../common/messages');

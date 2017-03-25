@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = bot => {
   bot.onText(/\/help/, message => {
     const fromId = message.from.id;
