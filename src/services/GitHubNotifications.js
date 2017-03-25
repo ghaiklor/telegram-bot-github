@@ -1,5 +1,3 @@
-"use strict";
-
 const EventEmitter = require('events').EventEmitter;
 const request = require('request');
 
@@ -11,6 +9,7 @@ class GitHubNotifications extends EventEmitter {
 
     this._username = username;
     this._token = token;
+    this._latestReadTimestamp = new Date();
     this._headers = {'User-Agent': 'telegram-bot-github'};
     this._timeout = null;
 
@@ -36,14 +35,15 @@ class GitHubNotifications extends EventEmitter {
     const interval = (Number(response.headers['X-Poll-Interval']) || 60) * 1000;
 
     if (response.statusCode === 304 || response.statusCode === 200) {
-      this._headers['If-Modified-Since'] = response.headers.date;
+      this._headers['If-Modified-Since'] = this._latestReadTimestamp || response.headers.date;
+      this._latestReadTimestamp = response.headers.date;
     }
 
     if (response.statusCode === 200) {
       body.forEach(notification => {
         const subjectUrl = this._buildAuthUrl(this._username, this._token, notification.subject.latest_comment_url);
         const headers = {'User-Agent': 'telegram-bot-github'};
-        
+
         if (!subjectUrl) return;
 
         request(subjectUrl, {headers, json: true}, this._onSubjectResponse.bind(this));
