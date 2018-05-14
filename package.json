@@ -16,7 +16,7 @@
     "start": "node src/index.js"
   },
   "dependencies": {
-    "body-parser": "1.18.0",
+    "body-parser": "1.18.3",
     "express": "4.15.2",
     "mongoose": "5.0.0-rc1",
     "node-telegram-bot-api": "0.30.0",
