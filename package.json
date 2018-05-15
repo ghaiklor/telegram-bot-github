@@ -20,7 +20,7 @@
     "express": "4.15.2",
     "mongoose": "5.0.0-rc1",
     "node-telegram-bot-api": "0.30.0",
-    "request": "2.84.0",
+    "request": "2.86.0",
     "require-all": "2.2.0"
   },
   "devDependencies": {
