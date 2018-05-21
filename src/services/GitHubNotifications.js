@@ -1,12 +1,13 @@
 const EventEmitter = require('events').EventEmitter;
 const request = require('request');
+const Redis = require('ioredis');
 
 const subscribedUsers = {};
 
 class GitHubNotifications extends EventEmitter {
   constructor(username, token) {
     super();
-
+    this.redis = new Redis(process.env.REDIS_URL);
     this._username = username;
     this._token = token;
     this._latestReadTimestamp = new Date();
@@ -35,8 +36,11 @@ class GitHubNotifications extends EventEmitter {
     const interval = (Number(response.headers['X-Poll-Interval']) || 60) * 1000;
 
     if (response.statusCode === 304 || response.statusCode === 200) {
-      this._headers['If-Modified-Since'] = this._latestReadTimestamp || response.headers.date;
-      this._latestReadTimestamp = response.headers.date;
+      
+      this.redis.get(this._username, function (err, result) {
+        this._headers['If-Modified-Since'] = result ||  response.headers.date;
+      }))
+      this.redis.set(this._username,  response.headers.date);
     }
 
     if (response.statusCode === 200) {
