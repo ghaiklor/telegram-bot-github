@@ -1,6 +1,6 @@
-const User = require('../models/User');
-const GitHubNotifications = require('../services/GitHubNotifications');
-const MESSAGES = require('../common/messages');
+const {User} = require('../models');
+const {GitHubNotification} = require('../services');
+const {MESSAGES} = require('../common');
 
 module.exports = bot => {
   bot.onText(/\/auth (.*):(.*)|\/auth/, (message, match) => {
@@ -20,19 +20,21 @@ module.exports = bot => {
           if (error && error.code == '11000') return bot.sendMessage(telegramId, MESSAGES.USERNAME_ALREADY_REGISTERED);
           if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
 
-          bot.sendMessage(telegramId, MESSAGES.REGISTER_SUCCESSFUL);
-          GitHubNotifications.subscribe(username, token)
+          new GitHubNotification(username, token, new Date(0))
             .on('notification', notification => bot.sendMessage(telegramId, notification))
             .once('unauthorized', () => bot.sendMessage(telegramId, MESSAGES.UNAUTHORIZED));
+
+          return bot.sendMessage(telegramId, MESSAGES.REGISTER_SUCCESSFUL);
         });
       } else {
         User.update({username, telegramId}, {token}, error => {
           if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
 
-          bot.sendMessage(telegramId, MESSAGES.PERSONAL_TOKEN_UPDATED);
-          GitHubNotifications.subscribe(username, token)
+          new GitHubNotification(username, token, user.notifiedSince)
             .on('notification', notification => bot.sendMessage(telegramId, notification))
             .once('unauthorized', () => bot.sendMessage(telegramId, MESSAGES.UNAUTHORIZED));
+
+          return bot.sendMessage(telegramId, MESSAGES.PERSONAL_TOKEN_UPDATED);
         });
       }
     });

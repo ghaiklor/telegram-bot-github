@@ -2,36 +2,28 @@
   "name": "telegram-bot-github",
   "version": "1.0.0",
   "description": "Allows to you receive GitHub notifications right in the Telegram",
-  "author": "ghaiklor",
+  "author": "Eugene Obrezkov <ghaiklor@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/ghaiklor/telegram-bot-github#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ghaiklor/telegram-bot-github.git"
   },
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ghaiklor/telegram-bot-github/issues"
   },
-  "homepage": "https://github.com/ghaiklor/telegram-bot-github#readme",
   "scripts": {
     "start": "node src/index.js"
   },
   "dependencies": {
-    "body-parser": "1.18.0",
-    "express": "4.15.2",
-    "mongoose": "5.0.0-rc1",
+    "body-parser": "1.18.3",
+    "express": "4.16.3",
+    "moment": "2.22.1",
+    "mongoose": "5.1.2",
     "node-telegram-bot-api": "0.30.0",
-    "request": "2.84.0",
-    "require-all": "2.2.0"
-  },
-  "devDependencies": {
-    "cz-conventional-changelog": "2.1.0",
-    "istanbul": "0.4.5",
-    "mocha": "4.1.0",
-    "sinon": "4.1.4"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
+    "request": "2.87.0",
+    "request-promise-native": "1.0.5",
+    "require-all": "2.2.0",
+    "winston": "2.4.2"
   }
 }

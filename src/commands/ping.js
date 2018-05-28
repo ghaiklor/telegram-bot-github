@@ -3,6 +3,6 @@ module.exports = bot => {
     const fromId = message.from.id;
     const response = `I'm alive, don't worry :)`;
 
-    bot.sendMessage(fromId, response);
+    return bot.sendMessage(fromId, response);
   });
 };

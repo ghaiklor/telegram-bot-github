@@ -3,9 +3,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const requireAll = require('require-all');
 const TelegramBot = require('node-telegram-bot-api');
-const GitHubNotifications = require('./services/GitHubNotifications');
-const User = require('./models/User');
-const MESSAGES = require('./common/messages');
+const {User} = require('./models');
+const {MESSAGES} = require('./common');
+const {GitHubNotification} = require('./services');
 const BOT_COMMANDS = requireAll({dirname: `${__dirname}/commands`});
 const app = express();
 
@@ -14,12 +14,6 @@ if (!process.env.MONGODB_URI) throw new Error('You must provide MONGODB_URI');
 if (!process.env.PORT) throw new Error('You must provide PORT');
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, {polling: process.env.NODE_ENV !== 'production'});
-if (process.env.NODE_ENV === 'production') {
-  bot.setWebHook(`https://telegram-bot-github.herokuapp.com/${bot.token}`)
-} else {
-  bot.setWebHook('');
-}
-
 Object.keys(BOT_COMMANDS).forEach(command => BOT_COMMANDS[command](bot));
 
 app.use(bodyParser.json());
@@ -30,14 +24,15 @@ app.post(`/${process.env.TELEGRAM_BOT_TOKEN}`, (req, res) => {
 });
 app.listen(process.env.PORT);
 
-mongoose.connect(process.env.MONGODB_URI);
+(async function init() {
+  await Promise.all([
+    mongoose.connect(process.env.MONGODB_URI),
+    bot.setWebHook(process.env.NODE_ENV === 'production' ? `https://telegram-bot-github.herokuapp.com/${bot.token}` : '')
+  ]);
 
-User.find({}, (error, users) => {
-  if (error) throw new Error(error);
-
-  users.forEach(user => {
-    GitHubNotifications.subscribe(user.username, user.token)
-      .on('notification', notification => bot.sendMessage(user.telegramId, `${notification}`))
-      .once('unauthorized', () => bot.sendMessage(user.telegramId, MESSAGES.UNAUTHORIZED));
-  });
-});
+  const users = await User.find({});
+  users.forEach(user => new GitHubNotification(user.username, user.token, user.notifiedSince)
+    .on('notification', notification => bot.sendMessage(user.telegramId, `${notification}`))
+    .once('unauthorized', () => bot.sendMessage(user.telegramId, MESSAGES.UNAUTHORIZED))
+  );
+})();

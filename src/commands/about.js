@@ -10,6 +10,6 @@ Follow me on GitHub - https://github.com/ghaiklor.
 You can report issues directly to me via Twitter and I'll respond as soon as possible, thanks.
 `;
 
-    bot.sendMessage(fromId, response);
+    return bot.sendMessage(fromId, response);
   });
 };

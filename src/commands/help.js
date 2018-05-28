@@ -12,6 +12,6 @@ Your personal token must have 'repo' and 'notifications' scope, otherwise, I can
 After you generate your personal token, call me via /auth username:token command, thanks.
     `;
 
-    bot.sendMessage(fromId, response);
+    return bot.sendMessage(fromId, response);
   });
 };
