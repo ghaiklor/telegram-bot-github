@@ -1,3 +1,6 @@
+## NOTE
+_**This project is no longer supported**_
+
 # telegram-bot-github
 
 Telegram bot that notifies you when you get new notification on GitHub.
