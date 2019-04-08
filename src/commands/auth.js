@@ -1,6 +1,6 @@
-const {User} = require('../models');
-const {GitHubNotification} = require('../services');
-const {MESSAGES} = require('../common');
+const { User } = require('../models');
+const { GitHubNotification } = require('../services');
+const { MESSAGES } = require('../common');
 
 module.exports = bot => {
   bot.onText(/\/auth (.*):(.*)|\/auth/, (message, match) => {
@@ -12,11 +12,11 @@ module.exports = bot => {
     if (!username) return bot.sendMessage(telegramId, MESSAGES.USERNAME_NOT_SPECIFIED);
     if (!token) return bot.sendMessage(telegramId, MESSAGES.GITHUB_TOKEN_NOT_SPECIFIED);
 
-    User.findOne({username, telegramId}, (error, user) => {
+    User.findOne({ username, telegramId }, (error, user) => {
       if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
 
       if (!user) {
-        User.create({username, token, telegramId}, error => {
+        User.create({ username, token, telegramId }, error => {
           if (error && error.code == '11000') return bot.sendMessage(telegramId, MESSAGES.USERNAME_ALREADY_REGISTERED);
           if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
 
@@ -27,7 +27,7 @@ module.exports = bot => {
           return bot.sendMessage(telegramId, MESSAGES.REGISTER_SUCCESSFUL);
         });
       } else {
-        User.update({username, telegramId}, {token}, error => {
+        User.update({ username, telegramId }, { token }, error => {
           if (error) return bot.sendMessage(telegramId, MESSAGES.SOMETHING_WENT_WRONG);
 
           new GitHubNotification(username, token, user.notifiedSince)

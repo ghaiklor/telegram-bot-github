@@ -1,8 +1,8 @@
 const logger = require('winston');
 const EventEmitter = require('events').EventEmitter;
 const request = require('request-promise-native');
-const {URL} = require('url');
-const {User} = require('../models');
+const { URL } = require('url');
+const { User } = require('../models');
 
 /**
  * Implement notifier for GitHub Notification API
@@ -24,7 +24,7 @@ class GitHubNotification extends EventEmitter {
     this._username = username;
     this._token = token;
     this._notifiedSince = notifiedSince;
-    this._headers = {'User-Agent': 'telegram-bot-github', 'If-Modified-Since': this._notifiedSince};
+    this._headers = { 'User-Agent': 'telegram-bot-github', 'If-Modified-Since': this._notifiedSince };
 
     this.process();
   }
@@ -44,7 +44,7 @@ class GitHubNotification extends EventEmitter {
     if (!subject) return;
 
     // Get required fields from subject
-    const {title, url, latest_comment_url: latestCommentUrl, type} = subject;
+    const { title, url, latest_comment_url: latestCommentUrl, type } = subject;
 
     // Skip if there are no urls at all
     if (!latestCommentUrl && !url) return;
@@ -53,11 +53,11 @@ class GitHubNotification extends EventEmitter {
 
     try {
       const response = await request(subjectUrl, {
-        headers: {'User-Agent': 'telegram-bot-github'},
+        headers: { 'User-Agent': 'telegram-bot-github' },
         json: true,
         resolveWithFullResponse: true
       });
-      const {body} = response;
+      const { body } = response;
       const message = `You got an update in ${title} [${type}]\nLink: ${body.html_url}`;
 
       this.emit('notification', message);
@@ -73,14 +73,14 @@ class GitHubNotification extends EventEmitter {
     const url = GitHubNotification.buildAuthUrl(this._username, this._token, 'https://api.github.com/notifications');
 
     try {
-      const response = await request(url, {headers: this._headers, json: true, resolveWithFullResponse: true});
-      const {headers, body} = response;
+      const response = await request(url, { headers: this._headers, json: true, resolveWithFullResponse: true });
+      const { headers, body } = response;
       const interval = (Number(headers['X-Poll-Interval']) || 60) * 1000;
       const notifiedSince = headers.date || new Date();
 
       this._notifiedSince = notifiedSince;
       this._headers['If-Modified-Since'] = notifiedSince;
-      await User.findOneAndUpdate({username: this._username}, {notifiedSince: notifiedSince});
+      await User.findOneAndUpdate({ username: this._username }, { notifiedSince: notifiedSince });
 
       body.map(this.onNotification.bind(this));
       setTimeout(this.process.bind(this), interval);
@@ -92,7 +92,7 @@ class GitHubNotification extends EventEmitter {
         this.emit('unauthorized');
 
         logger.error(`${this._username} is unauthorized, removing user from database...`);
-        await User.remove({username: this._username});
+        await User.remove({ username: this._username });
       }
 
       if (statusCode === 304) {
@@ -101,7 +101,7 @@ class GitHubNotification extends EventEmitter {
 
         this._notifiedSince = notifiedSince;
         this._headers['If-Modified-Since'] = notifiedSince;
-        await User.findOneAndUpdate({username: this._username}, {notifiedSince: notifiedSince});
+        await User.findOneAndUpdate({ username: this._username }, { notifiedSince: notifiedSince });
 
         setTimeout(this.process.bind(this), interval);
       }

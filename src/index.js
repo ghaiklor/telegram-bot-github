@@ -3,17 +3,17 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const requireAll = require('require-all');
 const TelegramBot = require('node-telegram-bot-api');
-const {User} = require('./models');
-const {MESSAGES} = require('./common');
-const {GitHubNotification} = require('./services');
-const BOT_COMMANDS = requireAll({dirname: `${__dirname}/commands`});
+const { User } = require('./models');
+const { MESSAGES } = require('./common');
+const { GitHubNotification } = require('./services');
+const BOT_COMMANDS = requireAll({ dirname: `${__dirname}/commands` });
 const app = express();
 
 if (!process.env.TELEGRAM_BOT_TOKEN) throw new Error('You must provide TELEGRAM_BOT_TOKEN');
 if (!process.env.MONGODB_URI) throw new Error('You must provide MONGODB_URI');
 if (!process.env.PORT) throw new Error('You must provide PORT');
 
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, {polling: process.env.NODE_ENV !== 'production'});
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: process.env.NODE_ENV !== 'production' });
 Object.keys(BOT_COMMANDS).forEach(command => BOT_COMMANDS[command](bot));
 
 app.use(bodyParser.json());
