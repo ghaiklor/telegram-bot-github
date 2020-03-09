@@ -22,7 +22,7 @@
     "mongoose": "5.5.12",
     "node-telegram-bot-api": "0.30.0",
     "request": "2.88.0",
-    "request-promise-native": "1.0.7",
+    "request-promise-native": "1.0.8",
     "require-all": "3.0.0",
     "winston": "3.2.1"
   }
