@@ -21,7 +21,7 @@
     "moment": "2.24.0",
     "mongoose": "5.9.1",
     "node-telegram-bot-api": "0.30.0",
-    "request": "2.88.0",
+    "request": "2.88.2",
     "request-promise-native": "1.0.7",
     "require-all": "3.0.0",
     "winston": "3.2.1"
