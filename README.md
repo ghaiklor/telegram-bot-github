@@ -4,6 +4,10 @@ _This project is no longer supported, feature requests are not going to be imple
 _Though, it works fine as described in README._
 
 Telegram bot that notifies you when you get new notification on GitHub.
+It uses the GitHub endpoint `/notifications`, watches for any changes by pooling it with intervals.
+
+There is no filtering\sorting or something, it just pools the endpoint and if anything new happened, sends to you into Telegram.
+If you want to “filter” out some notifications, just stop watching the repository on GitHub, so GitHub will stop send notifications.
 
 You can add this bot to your contact list [here](http://telegram.me/GitHubNotificationsBot).
 
@@ -11,7 +15,7 @@ You can add this bot to your contact list [here](http://telegram.me/GitHubNotifi
 
 The MIT License (MIT)
 
-Copyright (c) 2015-2018 Eugene Obrezkov
+Copyright (c) 2015-2020 Eugene Obrezkov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
