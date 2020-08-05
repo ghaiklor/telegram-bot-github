@@ -27,7 +27,7 @@
     "request": "2.88.2",
     "request-promise-native": "1.0.7",
     "require-all": "3.0.0",
-    "winston": "3.2.1",
+    "winston": "3.3.3",
     "snyk": "^1.335.0"
   },
   "snyk": true
