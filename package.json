@@ -22,13 +22,13 @@
     "express": "4.17.1",
     "moment": "2.29.1",
     "node-telegram-bot-api": "0.51.0",
-    "mongoose": "5.11.8",
+    "mongoose": "5.12.3",
     "node-telegram-bot-api": "0.30.0",
     "request": "2.88.2",
     "request-promise-native": "1.0.9",
     "require-all": "3.0.0",
     "winston": "3.2.1",
-    "snyk": "^1.465.0"
+    "snyk": "^1.518.0"
   },
   "snyk": true
 }
