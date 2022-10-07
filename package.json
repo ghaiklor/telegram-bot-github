@@ -22,7 +22,7 @@
     "express": "4.17.1",
     "moment": "2.29.4",
     "node-telegram-bot-api": "0.52.0",
-    "mongoose": "5.12.3",
+    "mongoose": "5.13.15",
     "node-telegram-bot-api": "0.30.0",
     "request": "2.88.2",
     "request-promise-native": "1.0.9",
